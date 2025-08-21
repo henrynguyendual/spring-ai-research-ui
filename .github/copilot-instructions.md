@@ -6,8 +6,7 @@ Focused guidance for automated coding agents working in this repository. Keep ou
 
 - Framework: Next.js 15 App Router (`src/app`), Turbopack dev/build (`package.json` scripts).
 - Styling: Tailwind CSS v4 (layered tokens + OKLCH color system) configured directly in `src/app/globals.css`. Utility merge helper `cn` in `src/lib/utils.ts` (always use it to combine dynamic class lists to avoid Tailwind conflict duplication).
-- Storybook: Vite + `@storybook/nextjs-vite` for component stories (`.storybook/*`, `src/stories/*`). Stories double as interaction tests (see `Page.stories.ts` play function) and a11y baseline.
-- Testing: Vitest configured only for Storybook stories via `vitest.config.ts` (storybook project with Playwright browser runner). No generic unit test setup present—add new tests either as Storybook stories (preferred) or extend Vitest config deliberately.
+- Testing: Vitest configured for basic testing via `vitest.config.ts` with jsdom environment. Add new tests by extending Vitest config or creating test files.
 
 ### 2. Conventions & Patterns
 
@@ -30,22 +29,20 @@ Focused guidance for automated coding agents working in this repository. Keep ou
 - State management: prefer colocated React state; only introduce `zustand` for cross-route global state (library already available).
 - Data fetching: choose between (a) Server Component async/`fetch` for static/SSR, (b) client caching via `@tanstack/react-query` or `swr` (both installed) when you need revalidation or mutations. Do not mix both for the same resource without a clear cache strategy.
 
-### 5. Storybook & Testing Workflow
+### 5. Testing Workflow
 
-- For any new component: add a story in `src/stories/` (or colocate later if structure evolves) with controls and minimal args. Use interaction tests via `play` and `storybook/test` utilities for simple behavioral assertions instead of standalone unit tests.
-- Accessibility checks: a11y addon is configured in `preview.ts` with `test: "todo"`; treat violations as warnings—only escalate if converting to CI gating later.
-- To extend tests beyond stories: augment `vitest.config.ts` with another project block; keep Storybook test project unchanged.
+- For any new component: create appropriate test files with Vitest.
+- To add tests: create test files in appropriate locations and configure via `vitest.config.ts`.
 
 ### 6. Linting & Formatting
 
-- ESLint flat config extends `next/core-web-vitals` + Storybook recommended rules. Run with `npm run lint`. Fix issues before committing; prefer code actions rather than disabling rules unless justified.
+- ESLint flat config extends `next/core-web-vitals`. Run with `npm run lint`. Fix issues before committing; prefer code actions rather than disabling rules unless justified.
 
 ### 7. Scripts & Commands (macOS/zsh)
 
 - Dev server: `npm run dev` (Turbopack).
 - Production build: `npm run build`; start: `npm start`.
 - Lint: `npm run lint`.
-- (When added) Run Storybook or Chromatic: configure new scripts rather than ad‑hoc commands.
 
 ### 8. Dependency Usage Notes
 
